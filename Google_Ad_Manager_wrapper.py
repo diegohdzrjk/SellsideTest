@@ -5,7 +5,7 @@ gam_version_default = 'v202208'
 def report(ad_network_file, dimensions, columns, start_date, end_date, dimension_attributes=[], time_zone_type=None, filters=None, dateRangeType='CUSTOM_DATE', version=gam_version_default, adUnitView="Normal", reportCurrency="USD", printall=False):
     
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
-    client.cache = common.ZeepServiceProxy.NO_CACHE
+    #client.cache = common.ZeepServiceProxy.NO_CACHE
     network_service = client.GetService('NetworkService', version=version)
     current_network = network_service.getCurrentNetwork()
     if printall: print('Found network %s (%s)!' % (current_network['displayName'], current_network['networkCode']))
