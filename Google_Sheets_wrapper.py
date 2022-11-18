@@ -7,17 +7,13 @@
 # Libraries
 import socket
 import os.path
-import pickle
 import json
 import traceback
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
 from oauth2client.client import AccessTokenCredentials
 import urllib
 import streamlit as st
 from httplib2 import Http
-from apiclient import discovery
 import numpy as np
 
 ######################################################################
@@ -36,12 +32,8 @@ refresh_token = st.secrets["GoogleSheets_refresh_token"]
 
 
 def get_GS_service(use_refreshed_token=True, servicetype='sheets', version='v4'):
-    if use_refreshed_token:
-        print("Trying: Using a refreshed token")
-        return get_service_refreshed_token(servicetype, version)
-    else:
-        print("Trying: Using credentials")
-        return get_GS_service_CREDS(servicetype, version)
+    print("Trying: Using a refreshed token")
+    return get_service_refreshed_token(servicetype, version)
     
 def refresh_access_token():
     data = urllib.parse.urlencode({'grant_type':    'refresh_token',
@@ -86,45 +78,6 @@ def get_service_refreshed_token(servicetype='sheets', version='v4'):
     except:
         return traceback.format_exc()
     
-def get_GS_service_CREDS(servicetype='sheets', version='v4'):
-    """
-        ---------------------------------
-        Get the Google Sheets service
-        ---------------------------------
-        Return: 
-            - the Google Sheets service
-            - error flag
-        ---------------------------------
-    """
-    socket.setdefaulttimeout(600)
-    # If modifying these scopes, delete the file token.pickle.
-    SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-    creds = None
-    # The file token.pickle stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    
-    try:
-        if os.path.exists(GOOGLE_SHEETS_CREDENTIALS_FOLDER+'token.pickle'):
-            with open(GOOGLE_SHEETS_CREDENTIALS_FOLDER+'token.pickle', 'rb') as token:
-                creds = pickle.load(token)
-        # If there are no (valid) credentials available, let the user log in.
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(GOOGLE_SHEETS_CREDENTIALS_FOLDER+'credentials.json', 
-                                                                 SCOPES)
-                creds = flow.run_local_server(port=0)
-            # Save the credentials for the next run
-            with open(GOOGLE_SHEETS_CREDENTIALS_FOLDER+'token.pickle', 'wb') as token:
-                pickle.dump(creds, token)
-
-        service = build(servicetype, version, credentials=creds)
-        return service
-    except:
-        return traceback.format_exc()
-
 def get_spreadsheet_data(service, spreadsheet_id, data_to_pull):
     """
         --------------------------------------------------------
