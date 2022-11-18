@@ -363,6 +363,7 @@ def get_config_data():
     spreadsheetID = "1Lm6_eAXt8soY_QsmUxa8O5LI62VQwfbT8ZAadH9Myjw"
     Sheets_service = Sheets.get_GS_service()
     config_data = Sheets.get_spreadsheet_data(Sheets_service, spreadsheetID, "Configuracion")
+    print(len(config_data))
     config_data = pd.DataFrame(config_data[2:], columns=config_data[0])
     config_data.fillna("")
     config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"])
