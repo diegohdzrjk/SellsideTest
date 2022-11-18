@@ -362,17 +362,13 @@ def LineItem_Name_Nomenclatura(evtdata, if_test=False):
 def get_config_data():
     spreadsheetID = "1Lm6_eAXt8soY_QsmUxa8O5LI62VQwfbT8ZAadH9Myjw"
     Sheets_service = Sheets.get_GS_service()
-
     config_data = Sheets.get_spreadsheet_data(Sheets_service, spreadsheetID, "Configuracion")
-    config_data_description = config_data[1]
     config_data = pd.DataFrame(config_data[2:], columns=config_data[0])
     config_data.fillna("")
-    config_data_columns = config_data.columns
     config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"])
     config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"])
     config_data["Line item type"] = config_data["Line item type"].apply(lambda x: x.upper())
     config_data["Ad Unit IDs"] = config_data["Ad Unit"].apply(lambda x: channel_list_to_ids(x))
-
     return config_data
 
 def main():
