@@ -401,7 +401,7 @@ def main():
 
     if_test = False
     IMPLEMENT__X__DAYS_BEFORE = 3
-    GAM_url_to_LI = "https://admanager.google.com/21828487186#delivery/line_item/detail/line_item_id={}&order_id={}"
+    GAM_url_to_LI = "https://admanager.google.com/"+st.secrets["ad_manager"]["network_code"]+"#delivery/line_item/detail/line_item_id={}&order_id={}"
 
     for row, evtdata in config_data.iterrows():
         # if the event is already implemented or its canceled then nothing happends
