@@ -4,7 +4,7 @@ import Upload_Lineitems_2022_10_18 as uploadLI
 import time
 import logging
 
-logging.getLogger('googleapicliet.discovery_cache').setLevel(logging.ERROR)
+logging.getLogger('googleapicliet.locked_file').setLevel(logging.ERROR)
 
 st.sidebar.header('Input')
 #st.image("")
