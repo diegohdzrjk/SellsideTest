@@ -4,11 +4,9 @@
 # In[1]:
 
 import streamlit as st
-import numpy as np
 import pandas as pd
 import datetime
 import traceback
-import sys
 import os
 import json
 import unidecode
