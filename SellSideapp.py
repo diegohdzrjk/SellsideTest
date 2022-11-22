@@ -44,7 +44,7 @@ def Upload_Line_Items_API_page():
         return data_loaded, data
 
     def displaytable(data):
-        new_data =  data[~data.Status.isin(["OK"])]
+        new_data =  data[~data.Status.isin(["OK","IGNORE"])]
         new_data = new_data[display_columns]
     
         st.header("New Line Items left to update or upload")
