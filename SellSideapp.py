@@ -72,8 +72,8 @@ def Upload_Line_Items_API_page():
         displaytable(data)
     
     if UploadButton:
-        st.text("Clicked")
-        time.sleep(5)
+        st.text("Uploading LineItems")
+        uploadLI.main()
         data_loaded, data = loadtable()
 
         if data_loaded:

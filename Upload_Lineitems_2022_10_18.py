@@ -40,6 +40,8 @@ ad_units_dict["cinemax"] = '21935100075'
 ad_units_dict["espn2"] = '21935016823'
 ad_units_dict["tudn"] = '21935012479'
 ad_units_dict["tudnhd"] = '22271035398'
+ad_units_dict["nflnetwork"] = '21935043830'
+
 
 
 # In[4]:
