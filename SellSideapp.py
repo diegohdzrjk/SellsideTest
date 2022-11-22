@@ -22,14 +22,12 @@ st.sidebar.info("""Esta applicación está diseñada para facilitar la elaboraci
 #### Upload Line Items API ####
     
 def Upload_Line_Items_API_page():
-    display_columns = ["Status", "Update Date", "Order Name", 
+    display_columns = ["Status", "Update Date", "Order Name", "",
                         "Start Date", "Start Time", "End Date", "End Time",
                         "Goal", "CPM", "Ad Unit", "Geography", 
                         "GeographyExclude", "Devices"]
     def load_data():
-        uploadLI.create_yamlfile()
         configdata = uploadLI.get_config_data()
-        uploadLI.delete_yamlfile()
         return configdata
 
     def loadtable():
@@ -73,7 +71,9 @@ def Upload_Line_Items_API_page():
     
     if UploadButton:
         st.text("Uploading LineItems")
+        uploadLI.create_yamlfile()
         uploadLI.main()
+        uploadLI.delete_yamlfile()
         data_loaded, data = loadtable()
 
         if data_loaded:
