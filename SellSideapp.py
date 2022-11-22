@@ -22,7 +22,7 @@ st.sidebar.info("""Esta applicación está diseñada para facilitar la elaboraci
 #### Upload Line Items API ####
     
 def Upload_Line_Items_API_page():
-    display_columns = ["Status", "Update Date", "Order Name", "",
+    display_columns = ["Status", "Update Date", "Order Name",
                         "Start Date", "Start Time", "End Date", "End Time",
                         "Goal", "CPM", "Ad Unit", "Geography", 
                         "GeographyExclude", "Devices"]
