@@ -71,9 +71,7 @@ def Upload_Line_Items_API_page():
     
     if UploadButton:
         st.text("Uploading LineItems")
-        uploadLI.create_yamlfile()
         uploadLI.main()
-        uploadLI.delete_yamlfile()
         data_loaded, data = loadtable()
 
         if data_loaded:

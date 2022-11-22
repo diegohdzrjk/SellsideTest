@@ -53,6 +53,12 @@ ad_units_dict
 
 
 # In[5]:
+
+def delete_yamlfile():
+    global yaml_file
+    if os.path.exists(yaml_file):
+        os.remove(yaml_file)
+
 def create_yamlfile():
     global yaml_file
     delete_yamlfile()
@@ -66,10 +72,6 @@ def create_yamlfile():
             f.close()
     print("YAML File created")
 
-def delete_yamlfile():
-    global yaml_file
-    if os.path.exists(yaml_file):
-        os.remove(yaml_file)
 
 def get_orderNAME_data(ad_network_file, OrderName, version=gam_version):
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
@@ -399,7 +401,7 @@ def main():
 
     config_data[config_data["Status"].isin(["FAIL","UPDATE"])]
 
-
+    create_yamlfile()
     # In[10]:
 
 
@@ -451,7 +453,7 @@ def main():
 
     new_config_data = pd.concat([pd.DataFrame([config_data_description], columns=config_data_columns), 
                                  config_data[config_data_columns].astype(str)]).astype(str)
-
+    delete_yamlfile()
     Sheets.update_spreadsheet(Sheets_service,spreadsheetID,"Configuracion",new_config_data)
 
 
