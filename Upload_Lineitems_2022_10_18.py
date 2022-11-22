@@ -54,6 +54,7 @@ ad_units_dict
 
 # In[5]:
 def create_yamlfile():
+    global yaml_file
     delete_yamlfile()
     if not os.path.exists(yaml_file):
         with open(yaml_file,'w') as f:
@@ -63,8 +64,10 @@ def create_yamlfile():
             f.write("\tclient_secret: "+str(st.secrets['ad_manager']['client_secret'])+"\n")
             f.write("\trefresh_token: "+str(st.secrets['ad_manager']['refresh_token'])+"\n")
             f.close()
+    print("YAML File created")
 
 def delete_yamlfile():
+    global yaml_file
     if os.path.exists(yaml_file):
         os.remove(yaml_file)
 
