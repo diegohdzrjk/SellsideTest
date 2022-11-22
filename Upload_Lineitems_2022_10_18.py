@@ -65,10 +65,10 @@ def create_yamlfile():
     if not os.path.exists(yaml_file):
         with open(yaml_file,'w') as f:
             f.write("ad_manager:\n")
-            f.write("\tnetwork_code: '"+str(st.secrets["ad_manager"]["network_code"])+"'\n")
-            f.write("\tclient_id: '"+str(st.secrets['ad_manager']['client_id'])+"'\n")
-            f.write("\tclient_secret: '"+str(st.secrets['ad_manager']['client_secret'])+"'\n")
-            f.write("\trefresh_token: '"+str(st.secrets['ad_manager']['refresh_token'])+"'\n")
+            f.write("network_code: '"+str(st.secrets["ad_manager"]["network_code"])+"'\n")
+            f.write("client_id: '"+str(st.secrets['ad_manager']['client_id'])+"'\n")
+            f.write("client_secret: '"+str(st.secrets['ad_manager']['client_secret'])+"'\n")
+            f.write("refresh_token: '"+str(st.secrets['ad_manager']['refresh_token'])+"'\n")
             f.close()
     print("YAML File created")
 
