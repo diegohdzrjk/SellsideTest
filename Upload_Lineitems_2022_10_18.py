@@ -15,7 +15,9 @@ from googleads import ad_manager, common, errors
 import Google_Ad_Manager_wrapper as gam
 import Google_Sheets_wrapper as Sheets
 
-yaml_file = 'Izzi_test.yaml'
+
+
+yaml_file = os.path.join(os.path.abspath(os.path.curdir),'Izzi_test.yaml')
 gam_version = 'v202208'
 
 
