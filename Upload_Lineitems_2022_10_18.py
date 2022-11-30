@@ -78,7 +78,7 @@ def get_orderNAME_data(ad_network_file, OrderName, version=gam_version):
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
     client.cache = common.ZeepServiceProxy.NO_CACHE
     service = client.GetService('OrderService', version=version)
-    query = {'query': f"WHERE Name = '{OrderName}'", 'values': None}
+    query = {'query': f"WHERE Name = '{OrderName.strip()}'", 'values': None}
     return service.getOrdersByStatement(query).results[0]
 
 def get_lineitem_data(ad_network_file, LineItemId, version=gam_version):
@@ -92,7 +92,7 @@ def get_lineitemNAME_data(ad_network_file, LineItemName, version=gam_version):
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
     client.cache = common.ZeepServiceProxy.NO_CACHE
     service = client.GetService('LineItemService', version=version)
-    query = {'query': f"WHERE Name = '{LineItemName}'", 'values': None}
+    query = {'query': f"WHERE Name = '{LineItemName.strip()}'", 'values': None}
     return service.getLineItemsByStatement(query).results
 
 def create_lineitem(ad_network_file, LineItem, version=gam_version):
