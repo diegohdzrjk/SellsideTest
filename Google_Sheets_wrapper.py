@@ -72,7 +72,7 @@ def get_service_refreshed_token(servicetype='sheets', version='v4'):
         http = credentials.authorize(Http())
 
         # Build the service object.
-        service = build(servicetype, version, http=http)
+        service = build(servicetype, version, http=http, cache_discovery=False)
 
         return service
     except:
