@@ -282,6 +282,7 @@ def get_Create_LineItem_data(evtdata):
     else:
         orderid = get_orderNAME_data(yaml_file, evtdata["Order Name"])['id']
     print(orderid)
+
     LI = LineItem(
                     orderID =orderid ,
                     orderName = evtdata["Order Name"],
@@ -435,6 +436,7 @@ def main():
         if len(evtdata['LineItemName'])==0 or evtdata["Status"] in ["FAIL","UPDATE"]:
             config_data.at[row, "LineItemName"] = LineItem_Name_Nomenclatura(evtdata, if_test=if_test)
             evtdata['LineItemName'] = config_data.at[row, "LineItemName"]
+            print(f"Status of LineItem: {evtdata['LineItemName']} is: {evtdata['Status']}")
 
         # if the event is to occur in less than IMPLEMENT__X__DAYS_BEFORE then create the LineItem
         if (evtdata["Start DateTime"]-datetime.datetime.today()).days > IMPLEMENT__X__DAYS_BEFORE:
