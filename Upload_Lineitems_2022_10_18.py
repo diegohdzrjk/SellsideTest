@@ -281,7 +281,7 @@ def get_Create_LineItem_data(evtdata):
         orderid = evtdata["Order Name"]
     else:
         orderid = get_orderNAME_data(yaml_file, evtdata["Order Name"])['id']
-        
+    print(orderid)
     LI = LineItem(
                     orderID =orderid ,
                     orderName = evtdata["Order Name"],
