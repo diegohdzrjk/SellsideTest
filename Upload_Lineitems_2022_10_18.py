@@ -276,8 +276,14 @@ def get_Create_LineItem_data(evtdata):
                                   replace(" ","").split(","),
                                   excludedLocations=unidecode.unidecode(evtdata["GeographyExclude"]).lower().
                                   replace(" ","").split(","))
+
+    if len(evtdata["Order Name"])>0:
+        orderid = evtdata["Order Name"]
+    else:
+        orderid = get_orderNAME_data(yaml_file, evtdata["Order Name"])['id']
+        
     LI = LineItem(
-                    orderID = get_orderNAME_data(yaml_file, evtdata["Order Name"])['id'],
+                    orderID =orderid ,
                     orderName = evtdata["Order Name"],
                     name = evtdata["LineItemName"], 
                     startDateTime = evtdata["Start DateTime"], 
