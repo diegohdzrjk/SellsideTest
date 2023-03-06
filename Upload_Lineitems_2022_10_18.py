@@ -11,11 +11,14 @@ import os
 import json
 import unidecode
 from googleads import ad_manager, common, errors
+import sys
+sys.path.append("Programs")
+sys.path.append("Programs/RefData")
 
 import Google_Ad_Manager_wrapper as gam
 import Google_Sheets_wrapper as Sheets
 
-
+RefDataFolder = os.path.join(os.getcwd(),"Programs","RefData","")
 
 yaml_file = 'Izzi_test.yaml'#os.path.join(os.path.abspath(os.path.curdir),'Izzi_test.yaml')
 gam_version = 'v202208'
@@ -27,7 +30,7 @@ gam_version = 'v202208'
 # In[2]:
 
 
-ad_units = pd.read_csv("AdUnitIDs.csv", dtype=str)
+ad_units = pd.read_csv(RefDataFolder+"AdUnitIDs.csv", dtype=str)
 ad_units = ad_units[ad_units["Ad unit"].str.contains("Izzi Network")]
 ad_units["Ad Unit Name"] = ad_units["Ad unit"].apply(lambda x: x.split("»")[-1].split("(")[0].strip().lower().replace(" ",""))
 ad_units_dict = ad_units.set_index("Ad Unit Name")["Ad unit ID"].to_dict()
@@ -228,10 +231,10 @@ class Targeting():
         
     def get_geoTargeting(self, targetedLocations=[], excludedLocations=[]):
         #https://developers.google.com/ad-manager/api/reference/v202208/LineItemService.GeoTargeting
-        with open("Location_dict.json", "r") as outfile:
+        with open(RefDataFolder+"Location_dict.json", "r") as outfile:
             Location_dict = json.load(outfile) 
 
-        with open("Location_dict_city.json", "r") as outfile:
+        with open(RefDataFolder+"Location_dict_city.json", "r") as outfile:
             Location_dict_city = json.load(outfile)
             
         self.geoTargeting = {
@@ -411,7 +414,6 @@ def main():
 
     # In[9]:
 
-
     config_data[config_data["Status"].isin(["FAIL","UPDATE"])]
 
     create_yamlfile()
@@ -469,10 +471,3 @@ def main():
                                  config_data[config_data_columns].astype(str)]).astype(str)
     delete_yamlfile()
     Sheets.update_spreadsheet(Sheets_service,spreadsheetID,"Configuracion",new_config_data)
-
-
-    # In[ ]:
-
-
-
-
