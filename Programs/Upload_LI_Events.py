@@ -152,8 +152,20 @@ def get_config_data():
 def main():
     spreadsheetID = st.secrets["LineItemsUpload"]["spreadsheetID"]
     Sheets_service = Sheets.get_GS_service()
+    config_data = Sheets.get_spreadsheet_data(Sheets_service, spreadsheetID, "Configuracion")
+    config_data_description = config_data[1]
+    config_data = pd.DataFrame(config_data[2:], columns=config_data[0])
+    for col in ["Update Date","Comments","LineItemURL","Boletin","Jornada","Visitante",
+                "Dia","Ad Type","LineItemID","LineItemName","GeographyExclude"]:
+        config_data[col].fillna("",inplace=True)
 
-    config_data = get_config_data()
+    config_data.dropna(inplace=True)
+    config_data_columns = config_data.columns
+    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"])
+    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"])
+    config_data["Line item type"] = config_data["Line item type"].apply(lambda x: x.upper())
+    config_data["Ad Unit IDs"] = config_data["Ad Unit"].apply(lambda x: channel_list_to_ids(x))
+
 
     # In[9]:
     config_data[config_data["Status"].isin(["FAIL","UPDATE"])]

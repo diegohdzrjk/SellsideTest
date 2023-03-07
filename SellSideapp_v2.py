@@ -87,3 +87,4 @@ elif choice == pages[2]:
 
 if choice == pages[1]:
     st.info("Todavia en desarollo")
+    
