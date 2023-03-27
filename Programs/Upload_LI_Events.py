@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import traceback
 import os
+import numpy as np
 import unidecode
 
 import Google_Ad_Manager_wrapper as gam
@@ -21,9 +22,16 @@ ad_units_dict["espn2"] = '21935016823'
 ad_units_dict["tudn"] = '21935012479'
 ad_units_dict["tudnhd"] = '22271035398'
 ad_units_dict["nflnetwork"] = '21935043830'
+ad_units_dict["vix"] = '22800534414'
 
 def channel_list_to_ids(x):
     global ad_units_dict
+    if len(x)==0: 
+        return ""
+    
+    if x.lower().replace(" ","")=="runofnetwork": 
+        return ""
+    
     id_list = []
     for chn in [y.strip() for y in x.lower().replace(" ","").split(",")]:
         if chn in ad_units_dict.keys():
@@ -31,35 +39,43 @@ def channel_list_to_ids(x):
         else:
             print(f"Check format from channel: {chn}")
             raise Exception(f"EL CANAL: {chn}  NO ESTA DADO DE ALTA")
+            
     return ",".join(id_list)
 
 
 # # Main functions
 def get_Create_LineItem_data(evtdata):
     LI_targeting = gam.Targeting()
-    LI_targeting.get_inventoryTargeting(targetedAdUnits=evtdata["Ad Unit IDs"].split(","))
-    LI_targeting.get_technologyTargeting(targetedDevice=unidecode.unidecode(evtdata["Devices"]).lower().
-                                         replace(" ","").split(","))
-    LI_targeting.get_geoTargeting(targetedLocations=unidecode.unidecode(evtdata["Geography"]).lower().
-                                  replace(" ","").split(","),
-                                  excludedLocations=unidecode.unidecode(evtdata["GeographyExclude"]).lower().
-                                  replace(" ","").split(","))
-
+    LI_targeting.get_inventoryTargeting(targetedAdUnits=np.unique(evtdata["Ad Unit IDs"].split(",")))
+    LI_targeting.get_technologyTargeting(targetedDevice=np.unique(unidecode.unidecode(evtdata["Devices"]).lower().
+                                         replace(" ","").split(",")))
+    LI_targeting.get_geoTargeting(targetedLocations=np.unique(unidecode.unidecode(evtdata["Geography"]).lower().
+                                  replace(" ","").split(",")),
+                                  excludedLocations=np.unique(unidecode.unidecode(evtdata["GeographyExclude"]).lower().
+                                  replace(" ","").split(",")))
+    
+    if len(evtdata["Order ID"])>0:
+        OrderID = evtdata["Order ID"]
+    else:
+        OrderID = gam.get_orderNAME_data(gam.yaml_file, evtdata["Order Name"])['id']
+    
     LI = gam.LineItem(
-                    orderID = gam.get_orderNAME_data(gam.yaml_file, evtdata["Order Name"])['id'] ,
+                    orderID = OrderID,
                     orderName = evtdata["Order Name"],
                     name = evtdata["LineItemName"], 
                     startDateTime = evtdata["Start DateTime"], 
                     endDateTime = evtdata["End DateTime"], 
-                    lineItemType = evtdata["Line item type"], 
+                    lineItemType = evtdata["Line item type"].replace(" ",""), 
                     costPerUnit = float(evtdata["CPM"].split("$")[-1]), 
                     costType = "CPM", 
                     Goal = int(evtdata["Goal"].split("%")[0]), 
                     creative_width = int(evtdata["Expected creatives"].split("x")[0]), 
                     creative_height = int(evtdata["Expected creatives"].split("x")[1]),
                     targeting = LI_targeting.__dict__,
+                    goalType = 'DAILY'
                  )
     return LI.__dict__
+
 
 def LineItem_Name_Nomenclatura(evtdata, if_test=False):
     # Functions to calculate Line Item name
@@ -138,7 +154,7 @@ def get_config_data():
     print(len(config_data))
     config_data = pd.DataFrame(config_data[2:], columns=config_data[0])
     for col in ["Update Date","Comments","LineItemURL","Boletin","Jornada","Visitante",
-                "Dia","Ad Type","LineItemID","LineItemName","GeographyExclude"]:
+                "Dia","Ad Type","LineItemID","LineItemName","Creative IDs","GeographyExclude"]:
         config_data[col].fillna("",inplace=True)
 
     config_data.dropna(inplace=True)
@@ -156,7 +172,7 @@ def main():
     config_data_description = config_data[1]
     config_data = pd.DataFrame(config_data[2:], columns=config_data[0])
     for col in ["Update Date","Comments","LineItemURL","Boletin","Jornada","Visitante",
-                "Dia","Ad Type","LineItemID","LineItemName","GeographyExclude"]:
+                "Dia","Ad Type","LineItemID","LineItemName","Creative IDs","GeographyExclude"]:
         config_data[col].fillna("",inplace=True)
 
     config_data.dropna(inplace=True)
@@ -208,6 +224,12 @@ def main():
                 resp = gam.create_lineitem(gam.yaml_file, LI_createdata)
                 config_data.at[row, "LineItemID"] = resp[0]['id']
                 evtdata['LineItemID'] = config_data.at[row, "LineItemID"]
+
+            # associate creatives 
+            if len(evtdata['Creative IDs'])>0:
+                for cred_id in evtdata['Creative IDs'].replace(" ","").split(","):
+                    association = {"lineItemId":evtdata['LineItemID'], "creativeId":cred_id}
+                    gam.createLineItemCreativeAssociations(gam.yaml_file, association)
 
             config_data.at[row, "Status"] = "OK"
             config_data.at[row, "LineItemURL"] = GAM_url_to_LI.format(evtdata['LineItemID'], LI_createdata['orderId'])

@@ -115,13 +115,27 @@ def update_lineitem(ad_network_file, LineItem, version=gam_version):
     service = client.GetService('LineItemService', version=version)
     return service.updateLineItems(LineItem)
 
+def get_preset_Targeting(ad_network_file, preset_name, version=gam_version):
+    client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
+    client.cache = common.ZeepServiceProxy.NO_CACHE
+    service = client.GetService('TargetingPresetService', version=version)
+    query = {'query': f"WHERE Name = '{preset_name.strip()}'", 'values': None}
+    return service.getTargetingPresetsByStatement(query)
+
+def createLineItemCreativeAssociations(ad_network_file, association, version=gam_version):
+    client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
+    client.cache = common.ZeepServiceProxy.NO_CACHE
+    service = client.GetService('LineItemCreativeAssociationService', version=version)
+    return service.createLineItemCreativeAssociations(association)
+
+
 class LineItem():
     #https://developers.google.com/ad-manager/api/reference/v202208/LineItemService
     def __init__(self, name, startDateTime, endDateTime, lineItemType, costPerUnit, costType, Goal, targeting,
                  priority=None, contractedUnitsBought=0, orderID='2679337185', orderName=None, LineItemID=None,
                  startDateTimeType='USE_START_DATE_TIME', creativeRotationType="OPTIMIZED", deliveryRateType=None,#"EVENLY",
                  discountType='PERCENTAGE', discount=0.0, environmentType='VIDEO_PLAYER', currencyCode='MXN',
-                 creative_width=640, creative_height=480
+                 goalType = 'DAILY', creative_width=640, creative_height=480
                 ):
         """
             name: Lineitem name
@@ -190,7 +204,7 @@ class LineItem():
         self.environmentType = environmentType
         self.videoMaxDuration = 30000
         self.primaryGoal = {
-                                'goalType': 'DAILY',
+                                'goalType': goalType,
                                 'unitType': 'IMPRESSIONS' ,
                                 'units': Goal
                             }
