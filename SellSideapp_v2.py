@@ -85,6 +85,4 @@ elif choice == pages[2]:
         
         st.text("The Automatic-Campaign-Data Google Sheet is updated")
 
-if choice == pages[1]:
-    st.info("Todavia en desarollo")
     

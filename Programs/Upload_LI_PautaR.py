@@ -127,6 +127,8 @@ def main():
             LI_createdata = pauta_regular_get_Create_LineItem_data(evtdata, 
                                                      name_use_preset_targeting=evtdata["Custom targeting / Preset"])
 
+            print(LI_createdata)
+
             # if line item exist it updates it otherwise it create's it
             LI_data_if_exists = len(evtdata['LineItemID'])>0
             if LI_data_if_exists:
