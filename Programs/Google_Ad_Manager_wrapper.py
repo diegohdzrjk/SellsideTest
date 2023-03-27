@@ -254,11 +254,13 @@ class Targeting():
     
     def get_inventoryTargeting(self, targetedAdUnits=[], excludedAdUnits=[]):
         #https://developers.google.com/ad-manager/api/reference/v202208/LineItemService.InventoryTargeting
-        self.inventoryTargeting["targetedAdUnits"] = [{'adUnitId': adunitid,'includeDescendants': True} 
+        if targetedAdUnits!=[""]:
+            self.inventoryTargeting["targetedAdUnits"] = [{'adUnitId': adunitid,'includeDescendants': True} 
                                                       for adunitid in targetedAdUnits]
-        self.inventoryTargeting["excludedAdUnits"] = [{'adUnitId': adunitid,'includeDescendants': True} 
+        if excludedAdUnits!=[""]:
+            self.inventoryTargeting["excludedAdUnits"] = [{'adUnitId': adunitid,'includeDescendants': True} 
                                                       for adunitid in excludedAdUnits]
-        
+          
     def get_technologyTargeting(self, targetedDevice=[], excludedDevice=[]):
         Device_dict = {'desktop':     {'id': 30000,'name': 'Desktop'},
                        'smartphone':  {'id': 30001,'name': 'Smartphone'},
