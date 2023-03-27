@@ -35,7 +35,7 @@ def export_df(page):
             EventUploadLI.main()     
         if page=="Carga Line Items Pauta Regular":
             print("Not doing anything")
-            #PautaRegularUploadLI.main()
+            PautaRegularUploadLI.main()
         return load_df(page)
 
     except Exception as e:
