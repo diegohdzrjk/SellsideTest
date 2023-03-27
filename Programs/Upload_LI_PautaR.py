@@ -22,13 +22,12 @@ ad_units_dict["tudn"] = '21935012479'
 ad_units_dict["tudnhd"] = '22271035398'
 ad_units_dict["nflnetwork"] = '21935043830'
 ad_units_dict["vix"] = '22800534414'
+ad_units_dict["runofnetwork"] = '21929232080'
+
 
 def channel_list_to_ids(x):
     global ad_units_dict
     if len(x)==0: 
-        return ""
-    
-    if x.lower().replace(" ","")=="runofnetwork": 
         return ""
     
     id_list = []
