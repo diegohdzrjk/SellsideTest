@@ -1,41 +1,50 @@
 import streamlit as st
 import pandas as pd
-import time
 import sys
 sys.path.append("Programs")
-import Upload_LI_Events as EventUploadLI
-import Upload_LI_PautaR as PautaRegularUploadLI
+import Upload_Order_LI
 import AutomaticUploadCampaings as AutUpdateSheets
 
-pages = ["Carga Line Items Eventos", 
-         "Carga Line Items Pauta Regular", 
+pages = ["Carga de Ordenes y Line Items",
          "Recarga Looker Campaign Sheets",
          ]
 
 def load_df(page):
+    titles = []
+    dfs = []
     try:
-        if page=="Carga Line Items Eventos":
-            df = EventUploadLI.get_config_data()
-            df = df[~df.Status.isin(["OK"])]#,"IGNORE"])]
-            return df
-        
-        if page=="Carga Line Items Pauta Regular":
-            df = PautaRegularUploadLI.get_config_data()
-            df = df[~df.Status.isin(["OK"])]#,"IGNORE"])]
-            return df
-
-        return pd.DataFrame([])
+        df = Upload_Order_LI.ordenes_get_config_data()
+        #df = df[~df.Status.isin(["OK"])]#,"IGNORE"])]
+        dfs.append(df)
     except Exception as e:
         st.warning(f"Error Loading the data: {e}")
-        return pd.DataFrame([])
+        dfs.append(df)
+    titles.append("Pagina Ordenes")
+
+    try:
+        df = Upload_Order_LI.pauta_regular_get_config_data()
+        df = df[~df.Status.isin(["OK"])]#,"IGNORE"])]
+        dfs.append(df)
+    except Exception as e:
+        st.warning(f"Error Loading the data: {e}")
+        dfs.append(df)
+    titles.append("Pagina Pauta Regular")
+    
+    try:
+        df = Upload_Order_LI.eventos_get_config_data()
+        df = df[~df.Status.isin(["OK"])]#,"IGNORE"])]
+        dfs.append(df)
+    except Exception as e:
+        st.warning(f"Error Loading the data: {e}")
+        dfs.append(df)
+    titles.append("Pagina Eventos")
+    
+    return titles, dfs
     
 def export_df(page):
     try:
-        if page=="Carga Line Items Eventos":
-            EventUploadLI.main()     
-        if page=="Carga Line Items Pauta Regular":
-            print("Not doing anything")
-            PautaRegularUploadLI.main()
+        if page==pages[0]:
+            Upload_Order_LI.main()
         return load_df(page)
 
     except Exception as e:
@@ -57,27 +66,39 @@ st.sidebar.info("""Esta applicación está diseñada para facilitar la elaboraci
 
 st.title("Sell Side App: "+choice)
 
-if choice in pages[:2]:
+if choice == pages[0]:
+    st.info(
+f"""Esta applicación sirve para crear las Órdenes y LineItems de campañas de video en GAM para **{st.secrets['client']['client']}**.\n
+El procedimiento a seguir es el siguiente:\n
+- Hacer click en el botón **'Load Data'** para visualizar las Órdenes y LineItems predefinidas en el archivo sheets {st.secrets['client']['url_sheets']}
+- Revisar que los datos sean los correctos
+- Hacer click en el botón **'Update Data'**. Esta acción creara las Órdenes y LineItems pertinentes y mostrará en pantalla el resto de los Órdenes y LineItems pendientes.
+- En caso de ocurrir un error, comunicar a un screenshot a **{st.secrets['client']['encargado']}**
+""")
+
     col1, col2 = st.columns(2)
     with col1:
         LoadButton = st.button("Load Data")
 
     with col2:
-        UploadButton = st.button("Upload Line items")
+        UploadButton = st.button("Upload Data")
 
     if LoadButton:
         with st.spinner("Loading data..."):
-            df = load_df(choice)
-            #st.session_state.df = df
-            st.dataframe(df)
+            titles, dfs = load_df(choice)
+            for title, df in zip(titles, dfs):
+                st.text(title)
+                st.dataframe(df)
 
     if UploadButton:
         with st.spinner("Exporting data..."):
-            exported_df = export_df(choice)
-            st.dataframe(exported_df)
+            titles, exported_dfs = export_df(choice)
+            for title, df in zip(titles, exported_dfs):
+                st.text(title)
+                st.dataframe(df)
 
 # "Recarga Looker Campaign Sheets"
-elif choice == pages[2]:
+elif choice == pages[1]:
     UpdateButton = st.button("Update Data")
     if UpdateButton:
         with st.spinner("Updating data..."):

@@ -70,13 +70,13 @@ def report(ad_network_file, dimensions, columns, start_date, end_date, dimension
     report_file.close()
     return report_file.name
 
-def get_lineitem_data(ad_network_file, LineItemId, version=gam_version):
+def get_lineitem_data(ad_network_file, LineItemId, version=gam_version):#actualizacion de api (202105)
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
     client.cache = common.ZeepServiceProxy.NO_CACHE
     lineitem_service = client.GetService('LineItemService', version=version)
     return lineitem_service.getLineItemsByStatement({'query': f'WHERE Id = {LineItemId}', 'values': None}).results[0]
 
-def get_forecast_lineitem_data(ad_network_file, lineitem_data, version=gam_version):
+def get_forecast_lineitem_data(ad_network_file, lineitem_data, version=gam_version):#actualizacion de api (202105)
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
     client.cache = common.ZeepServiceProxy.NO_CACHE
     forecast_service = client.GetService('ForecastService', version=version)
@@ -88,6 +88,27 @@ def get_orderNAME_data(ad_network_file, OrderName, version=gam_version):
     service = client.GetService('OrderService', version=version)
     query = {'query': f"WHERE Name = '{OrderName.strip()}'", 'values': None}
     return service.getOrdersByStatement(query).results[0]
+
+def get_order_data(ad_network_file, OrderId, version=gam_version):
+    client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
+    client.cache = common.ZeepServiceProxy.NO_CACHE
+    service = client.GetService('OrderService', version=version)
+    query = {'query': f'WHERE Id = {OrderId}', 'values': None}
+    return service.getOrdersByStatement(query).results[0]
+
+def get_company_data(ad_network_file, CompanyName, version=gam_version):
+    client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
+    client.cache = common.ZeepServiceProxy.NO_CACHE
+    service = client.GetService('CompanyService', version=version)
+    query = {'query': f"WHERE Name = '{CompanyName}'", 'values': None}
+    return service.getCompaniesByStatement(query).results[0]
+
+def get_username_data(ad_network_file, username, version=gam_version):
+    client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
+    client.cache = common.ZeepServiceProxy.NO_CACHE
+    service = client.GetService('UserService', version=version)
+    query = {'query': f"WHERE name = '{username}'", 'values': None}
+    return service.getUsersByStatement(query).results[0]
 
 def get_lineitem_data(ad_network_file, LineItemId, version=gam_version):
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
@@ -109,6 +130,18 @@ def create_lineitem(ad_network_file, LineItem, version=gam_version):
     service = client.GetService('LineItemService', version=version)
     return service.createLineItems(LineItem)
 
+def create_order(ad_network_file, OrderItem, version=gam_version):
+    client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
+    client.cache = common.ZeepServiceProxy.NO_CACHE
+    service = client.GetService('OrderService', version=version)
+    return service.createOrders(OrderItem)
+
+def update_order(ad_network_file, OrderItem, version=gam_version):
+    client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
+    client.cache = common.ZeepServiceProxy.NO_CACHE
+    service = client.GetService('OrderService', version=version)
+    return service.updateOrders(OrderItem)
+
 def update_lineitem(ad_network_file, LineItem, version=gam_version):
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
     client.cache = common.ZeepServiceProxy.NO_CACHE
@@ -127,6 +160,16 @@ def createLineItemCreativeAssociations(ad_network_file, association, version=gam
     client.cache = common.ZeepServiceProxy.NO_CACHE
     service = client.GetService('LineItemCreativeAssociationService', version=version)
     return service.createLineItemCreativeAssociations(association)
+
+class Order():
+    #https://developers.google.com/ad-manager/api/reference/v202208/OrderService
+    def __init__(self, name, advertiserId, traffickerId, salespersonId, orderID=None):
+
+        if orderID: self.id = orderID
+        self.name = name
+        self.advertiserId = advertiserId
+        self.traffickerId = traffickerId
+        self.salespersonId = salespersonId
 
 
 class LineItem():
