@@ -69,7 +69,6 @@ def report(ad_network_file, dimensions, columns, start_date, end_date, dimension
     if printall: print("Hola 5")
     report_file.close()
     return report_file.name
-
 def get_lineitem_data(ad_network_file, LineItemId, version=gam_version):#actualizacion de api (202105)
     client = ad_manager.AdManagerClient.LoadFromStorage(ad_network_file)
     client.cache = common.ZeepServiceProxy.NO_CACHE
@@ -160,6 +159,7 @@ def createLineItemCreativeAssociations(ad_network_file, association, version=gam
     client.cache = common.ZeepServiceProxy.NO_CACHE
     service = client.GetService('LineItemCreativeAssociationService', version=version)
     return service.createLineItemCreativeAssociations(association)
+
 
 class Order():
     #https://developers.google.com/ad-manager/api/reference/v202208/OrderService
