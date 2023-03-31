@@ -11,6 +11,7 @@ import Google_Sheets_wrapper as Sheets
 gam_version = 'v202208'
 
 RefDataFolder = os.path.join(os.getcwd(),"Programs","RefData","")
+IMPLEMENT__X__DAYS_BEFORE = 1000
 
 ad_units = pd.read_csv(RefDataFolder+"AdUnitIDs.csv", dtype=str)
 ad_units = ad_units[ad_units["Ad unit"].str.contains("Izzi Network")]
@@ -339,7 +340,6 @@ def main_pautaregular():
 
     gam.create_yamlfile()
 
-    IMPLEMENT__X__DAYS_BEFORE = 3
     #"+st.secrets["ad_manager"]["network_code"]+"
     GAM_url_to_LI = "https://admanager.google.com/21828487186#delivery/line_item/detail/line_item_id={}&order_id={}"
 
@@ -422,7 +422,7 @@ def main_evento():
     # In[10]:
 
     if_test = False
-    IMPLEMENT__X__DAYS_BEFORE = 3
+    
     GAM_url_to_LI = "https://admanager.google.com/"+st.secrets["ad_manager"]["network_code"]+"#delivery/line_item/detail/line_item_id={}&order_id={}"
 
     for row, evtdata in config_data.iterrows():
