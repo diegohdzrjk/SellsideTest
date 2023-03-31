@@ -297,10 +297,11 @@ class Targeting():
     
     def get_inventoryTargeting(self, targetedAdUnits=[], excludedAdUnits=[]):
         #https://developers.google.com/ad-manager/api/reference/v202208/LineItemService.InventoryTargeting
-        if len(targetedAdUnits)>1 or targetedAdUnits[0]!=[""]:
+        print(targetedAdUnits)
+        if targetedAdUnits!=[""]:
             self.inventoryTargeting["targetedAdUnits"] = [{'adUnitId': adunitid,'includeDescendants': True} 
                                                       for adunitid in targetedAdUnits]
-        if len(excludedAdUnits)>1 or excludedAdUnits[0]!=[""]:
+        if excludedAdUnits!=[""]:
             self.inventoryTargeting["excludedAdUnits"] = [{'adUnitId': adunitid,'includeDescendants': True} 
                                                       for adunitid in excludedAdUnits]
           
