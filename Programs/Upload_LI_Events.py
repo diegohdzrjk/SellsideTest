@@ -67,8 +67,8 @@ def get_Create_LineItem_data(evtdata):
                     costPerUnit = float(evtdata["CPM"].split("$")[-1]), 
                     costType = "CPM", 
                     Goal = int(evtdata["Goal"].split("%")[0]), 
-                    creative_width = int(evtdata["Expected creatives"].split("x")[0]), 
-                    creative_height = int(evtdata["Expected creatives"].split("x")[1]),
+                    creative_width = int(evtdata["Expected creatives"].lower().split("x")[0]), 
+                    creative_height = int(evtdata["Expected creatives"].lower().split("x")[1]),
                     targeting = LI_targeting.__dict__,
                     goalType = 'DAILY'
                  )
