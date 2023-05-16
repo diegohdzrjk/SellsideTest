@@ -157,8 +157,8 @@ def get_config_data():
 
     config_data.dropna(inplace=True)
     
-    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"], format='mixed')
-    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"], format='mixed')
+    #config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"], format='mixed')
+    #config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"], format='mixed')
     config_data["Line item type"] = config_data["Line item type"].apply(lambda x: x.upper())
     config_data["Ad Unit IDs"] = config_data["Ad Unit"].apply(lambda x: channel_list_to_ids(x))
     return config_data
@@ -175,11 +175,12 @@ def main():
 
     config_data.dropna(inplace=True)
     config_data_columns = config_data.columns
-    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"], format='mixed')
-    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"], format='mixed')
     config_data["Line item type"] = config_data["Line item type"].apply(lambda x: x.upper())
     config_data["Ad Unit IDs"] = config_data["Ad Unit"].apply(lambda x: channel_list_to_ids(x))
 
+    config_data = config_data[~evtdata["Status"].isin(["OK","CANCELED","IGNORE",""])]
+    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"], format='mixed')
+    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"], format='mixed')
 
     # In[9]:
     config_data[config_data["Status"].isin(["FAIL","UPDATE"])]
