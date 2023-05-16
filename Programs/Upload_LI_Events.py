@@ -175,8 +175,8 @@ def main():
 
     config_data.dropna(inplace=True)
     config_data_columns = config_data.columns
-    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"])
-    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"])
+    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"], format='mixed')
+    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"], format='mixed')
     config_data["Line item type"] = config_data["Line item type"].apply(lambda x: x.upper())
     config_data["Ad Unit IDs"] = config_data["Ad Unit"].apply(lambda x: channel_list_to_ids(x))
 
@@ -188,7 +188,7 @@ def main():
     # In[10]:
 
     if_test = False
-    IMPLEMENT__X__DAYS_BEFORE = 3
+    IMPLEMENT__X__DAYS_BEFORE = 365
     GAM_url_to_LI = "https://admanager.google.com/"+st.secrets["ad_manager"]["network_code"]+"#delivery/line_item/detail/line_item_id={}&order_id={}"
 
     for row, evtdata in config_data.iterrows():
