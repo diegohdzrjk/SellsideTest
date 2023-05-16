@@ -118,10 +118,10 @@ def LineItem_Name_Nomenclatura(evtdata, if_test=False):
     OrderName = unidecode.unidecode(("Boletin"+evtdata["Boletin"]+"_")*(len(evtdata["Boletin"])>0)+
                                               (evtdata["Torneo"] +"_")*(len(evtdata["Torneo"]) >0)+
                                               (evtdata["Jornada"])*(len(evtdata["Jornada"])>0)
-                                   ).replace(" ","")
+                                   ).replace(" ","_")
     LineItemDetail = unidecode.unidecode((evtdata["Local"])*(len(evtdata["Local"])>0)+
                                          ("_vs_"+evtdata["Visitante"])*(len(evtdata["Visitante"])>0)
-                                        ).replace(" ","")
+                                        ).replace(" ","_")
     
     Date = date_format(evtdata["Start DateTime"])
     
