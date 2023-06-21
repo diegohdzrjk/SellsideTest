@@ -57,6 +57,11 @@ def get_Create_LineItem_data(evtdata):
     else:
         OrderID = gam.get_orderNAME_data(gam.yaml_file, evtdata["Order Name"])['id']
     
+    if len(evtdata["Contracted Units"])>0:
+        contractedUnitsBought = int(evtdata["Contracted Units"])
+    else:
+        contractedUnitsBought = 0
+
     LI = gam.LineItem(
                     orderID = OrderID,
                     orderName = evtdata["Order Name"],
@@ -66,6 +71,7 @@ def get_Create_LineItem_data(evtdata):
                     lineItemType = evtdata["Line item type"].replace(" ",""), 
                     costPerUnit = float(evtdata["CPM"].split("$")[-1]), 
                     costType = "CPM", 
+                    contractedUnitsBought = contractedUnitsBought, 
                     Goal = int(evtdata["Goal"].split("%")[0]), 
                     creative_width = int(evtdata["Expected creatives"].lower().split("x")[0]), 
                     creative_height = int(evtdata["Expected creatives"].lower().split("x")[1]),
@@ -157,8 +163,8 @@ def get_config_data():
 
     config_data.dropna(inplace=True)
     
-    #config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"], format='mixed')
-    #config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"], format='mixed')
+    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"])
+    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"])
     config_data["Line item type"] = config_data["Line item type"].apply(lambda x: x.upper())
     config_data["Ad Unit IDs"] = config_data["Ad Unit"].apply(lambda x: channel_list_to_ids(x))
     return config_data
@@ -175,11 +181,10 @@ def main():
 
     config_data.dropna(inplace=True)
     config_data_columns = config_data.columns
-    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"], format='mixed')
-    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"], format='mixed')
+    config_data["Start DateTime"] = pd.to_datetime(config_data["Start Date"]+" "+config_data["Start Time"])
+    config_data["End DateTime"]   = pd.to_datetime(config_data["End Date"]+" "+config_data["End Time"])
     config_data["Line item type"] = config_data["Line item type"].apply(lambda x: x.upper())
     config_data["Ad Unit IDs"] = config_data["Ad Unit"].apply(lambda x: channel_list_to_ids(x))
-
 
 
     # In[9]:
