@@ -21,7 +21,7 @@ import Google_Sheets_wrapper as Sheets
 RefDataFolder = os.path.join(os.getcwd(),"Programs","RefData","")
 
 yaml_file = 'Izzi_test.yaml'#os.path.join(os.path.abspath(os.path.curdir),'Izzi_test.yaml')
-gam_version = 'v202208'
+gam_version = 'v202308'
 
 
 
