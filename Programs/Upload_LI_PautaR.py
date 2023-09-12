@@ -7,7 +7,7 @@ import unidecode
 
 import Google_Ad_Manager_wrapper as gam
 import Google_Sheets_wrapper as Sheets
-gam_version = 'v202208'
+gam_version = 'v202308'
 
 RefDataFolder = os.path.join(os.getcwd(),"Programs","RefData","")
 
@@ -23,6 +23,8 @@ ad_units_dict["tudnhd"] = '22271035398'
 ad_units_dict["nflnetwork"] = '21935043830'
 ad_units_dict["vix"] = '22800534414'
 ad_units_dict["runofnetwork"] = '21827487336'
+ad_units_dict["mtv"] = '21935013904'
+ad_units_dict["mtvhd"] = '22271035389'
 
 
 def channel_list_to_ids(x):

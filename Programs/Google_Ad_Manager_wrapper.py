@@ -5,7 +5,7 @@ import json
 import streamlit as st
 
 yaml_file = 'yaml_file.yaml'
-gam_version = 'v202208'
+gam_version = 'v202308'
 RefDataFolder = os.path.join(os.getcwd(),"Programs","RefData","")
 
 

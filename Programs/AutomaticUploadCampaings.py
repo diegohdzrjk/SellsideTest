@@ -4,7 +4,7 @@ import datetime
 import numpy as np
 import Google_Ad_Manager_wrapper as gam
 import Google_Sheets_wrapper as Sheets
-gam_version = 'v202208'
+gam_version = 'v202308'
 
 # # 2- GLOBAL PARAMETERS
 

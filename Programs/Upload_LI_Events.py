@@ -8,7 +8,7 @@ import unidecode
 
 import Google_Ad_Manager_wrapper as gam
 import Google_Sheets_wrapper as Sheets
-gam_version = 'v202208'
+gam_version = 'v202308'
 
 RefDataFolder = os.path.join(os.getcwd(),"Programs","RefData","")
 
