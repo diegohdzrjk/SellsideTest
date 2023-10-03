@@ -17,7 +17,7 @@ def load_df(page):
         df = df[~df.Status.isin(["OK","IGNORE"])]
         dfs.append(df)
     except Exception as e:
-        st.warning(f"Error Loading the data: {e}")
+        st.warning(f"Upload_Order_LI.ordenes_get_config_data\nError Loading the data: {e}")
         dfs.append(df)
     titles.append("Página Órdenes: Órdenes pendientes")
 
@@ -26,7 +26,7 @@ def load_df(page):
         df = df[~df.Status.isin(["OK","IGNORE"])]
         dfs.append(df)
     except Exception as e:
-        st.warning(f"Error Loading the data: {e}")
+        st.warning(f"Upload_Order_LI.pauta_regular_get_config_data\nError Loading the data: {e}")
         dfs.append(df)
     titles.append("Página Pauta Regular: Line Items pendientes")
     
@@ -35,7 +35,7 @@ def load_df(page):
         df = df[~df.Status.isin(["OK","IGNORE"])]
         dfs.append(df)
     except Exception as e:
-        st.warning(f"Error Loading the data: {e}")
+        st.warning(f"Upload_Order_LI.eventos_get_config_data\nError Loading the data: {e}")
         dfs.append(df)
     titles.append("Página Eventos: Line Items pendientes")
     
